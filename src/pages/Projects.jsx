@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 // Import all images
 import alien1 from '../assets/img/alien_1.271cb116.png';
@@ -117,22 +118,41 @@ const projects = [
   }
 ];
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 16
+    }
+  }
+};
+
 function ProjectCard({ project }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const handlePrev = () => {
+  const handlePrev = (e) => {
+    e.stopPropagation();
     setActiveIndex((prev) => (prev === 0 ? project.media.length - 1 : prev - 1));
   };
 
-  const handleNext = () => {
+  const handleNext = (e) => {
+    e.stopPropagation();
     setActiveIndex((prev) => (prev === project.media.length - 1 ? 0 : prev + 1));
   };
 
   const currentMedia = project.media[activeIndex];
 
   return (
-    <div className="card project-card">
-      <div className="project-body">
+    <motion.div 
+      className="project-card"
+      variants={cardVariants}
+      whileHover={{ y: -4, borderColor: 'var(--accent)', boxShadow: 'var(--shadow-hover)' }}
+    >
+      <div className="project-body" style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '1.25rem' }}>
         <div className="project-meta">
           <span className="project-tag">{project.tag}</span>
         </div>
@@ -140,36 +160,50 @@ function ProjectCard({ project }) {
         <p className="project-desc">{project.desc}</p>
         
         <div className="showcase-container carousel">
-          {currentMedia.type === 'video' ? (
-            <video 
-              src={currentMedia.src} 
-              className="video-player" 
-              controls 
-              muted 
-              preload="metadata"
-            />
-          ) : (
-            <img 
-              src={currentMedia.src} 
-              alt={`${project.title} Screenshot ${activeIndex + 1}`} 
-              className="project-image"
-            />
-          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, filter: 'blur(4px)' }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              style={{ width: '100%', height: '100%' }}
+            >
+              {currentMedia.type === 'video' ? (
+                <video 
+                  src={currentMedia.src} 
+                  className="video-player" 
+                  controls 
+                  muted 
+                  preload="metadata"
+                />
+              ) : (
+                <img 
+                  src={currentMedia.src} 
+                  alt={`${project.title} Screenshot ${activeIndex + 1}`} 
+                  className="project-image"
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
 
           {project.media.length > 1 && (
             <>
               <button className="carousel-arrow prev" onClick={handlePrev} aria-label="Previous media">
-                <ChevronLeft size={18} />
+                <IconChevronLeft size={18} stroke={1.5} />
               </button>
               <button className="carousel-arrow next" onClick={handleNext} aria-label="Next media">
-                <ChevronRight size={18} />
+                <IconChevronRight size={18} stroke={1.5} />
               </button>
               <div className="carousel-dots">
                 {project.media.map((_, idx) => (
                   <button 
                     key={idx}
                     className={`carousel-dot ${idx === activeIndex ? 'active' : ''}`}
-                    onClick={() => setActiveIndex(idx)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveIndex(idx);
+                    }}
                     aria-label={`Go to media ${idx + 1}`}
                   />
                 ))}
@@ -178,20 +212,34 @@ function ProjectCard({ project }) {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 export default function Projects() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
   return (
     <div className="projects-view">
       <h2 className="section-header">My Featured Projects</h2>
-      <hr />
-      <div className="projects-grid">
+      <motion.div 
+        className="projects-grid"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

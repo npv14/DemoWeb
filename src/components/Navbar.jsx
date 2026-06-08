@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon } from 'lucide-react';
+import { IconSun, IconMoon } from '@tabler/icons-react';
 
 export default function Navbar({ activeTab, setActiveTab, darkMode, setDarkMode }) {
   const toggleTheme = () => {
@@ -14,7 +14,7 @@ export default function Navbar({ activeTab, setActiveTab, darkMode, setDarkMode 
   return (
     <nav className="navbar">
       <div className="nav-brand" onClick={() => setActiveTab('home')}>
-        Nam Vu
+        Nam Vu <span className="nav-brand-dot"></span>
       </div>
       <div className="nav-links">
         <span 
@@ -34,7 +34,7 @@ export default function Navbar({ activeTab, setActiveTab, darkMode, setDarkMode 
           onClick={toggleTheme}
           aria-label="Toggle theme"
         >
-          {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          {darkMode ? <IconSun size={20} stroke={1.5} /> : <IconMoon size={20} stroke={1.5} />}
         </button>
       </div>
     </nav>
