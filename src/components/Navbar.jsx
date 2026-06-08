@@ -4,11 +4,6 @@ import { IconSun, IconMoon } from '@tabler/icons-react';
 export default function Navbar({ activeTab, setActiveTab, darkMode, setDarkMode }) {
   const toggleTheme = () => {
     setDarkMode(!darkMode);
-    if (!darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
   };
 
   return (

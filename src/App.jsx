@@ -24,13 +24,17 @@ import halongImg from './assets/img/halong_minimalist.png';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
-  // Set initial theme to dark by default
+  // Sync theme class with darkMode state
   useEffect(() => {
-    document.documentElement.classList.add('dark');
-  }, []);
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   // Listen to scroll events to show/hide Back to Top button
   useEffect(() => {

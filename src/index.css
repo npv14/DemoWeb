@@ -120,7 +120,7 @@ h1, h2, h3, h4 {
 
 .nav-brand {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.8rem;
   font-weight: 800;
   color: var(--text-bright);
   cursor: pointer;
@@ -259,7 +259,7 @@ h1, h2, h3, h4 {
 }
 
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 4.25rem;
   font-weight: 800;
   line-height: 1.05;
   color: var(--text-bright);
